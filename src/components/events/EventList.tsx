@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { EventItem } from "@Components/events";
 import { IEventDataProps } from "@Data/dummy-data";
 
@@ -8,7 +9,7 @@ interface IEventListProps {
 
 function EventList({ items }: IEventListProps) {
   return (
-    <ul>
+    <EventListWrapper>
       {items.map((event) => (
         <EventItem
           key={event.id}
@@ -19,8 +20,14 @@ function EventList({ items }: IEventListProps) {
           date={event.date}
         />
       ))}
-    </ul>
+    </EventListWrapper>
   );
 }
 
 export default EventList;
+
+const EventListWrapper = styled.ul`
+  width: 90%;
+  max-width: 40rem;
+  margin: 5rem auto;
+`;
