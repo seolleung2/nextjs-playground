@@ -1,6 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import styled from "styled-components";
+import { Button } from "@Components/ui";
+import { AddressIcon, ArrowRightIcon, DateIcon } from "@Components/icons";
 
 interface IEventtItemProps {
   key: string;
@@ -31,14 +32,21 @@ function EventItem(props: IEventtItemProps) {
         <div className="summary">
           <h2>{title}</h2>
           <div className="date">
+            <DateIcon />
             <time>{readableDate}</time>
           </div>
           <div className="address">
+            <AddressIcon />
             <address>{formattedAddress}</address>
           </div>
         </div>
         <div className="actions">
-          <Link href={exploreLink}>Explore Event</Link>
+          <Button link={exploreLink}>
+            <span>Explore Event</span>
+            <span className="icon">
+              <ArrowRightIcon />
+            </span>
+          </Button>
         </div>
       </div>
     </EventItemWrapper>
