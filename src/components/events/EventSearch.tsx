@@ -1,21 +1,36 @@
-import React from "react";
+import React, { useRef, FormEvent } from "react";
 import styled from "styled-components";
 import { Button } from "@Components/ui";
 
-function EventSearch(props: any) {
+interface IEventSearchProps {
+  onSearch: (year: string | undefined, month: string | undefined) => void;
+}
+
+function EventSearch({ onSearch }: IEventSearchProps) {
+  const yearInputRef = useRef<HTMLSelectElement>(null);
+  const monthInputRef = useRef<HTMLSelectElement>(null);
+
+  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const selectedYear = yearInputRef.current?.value;
+    const selectedMonth = monthInputRef.current?.value;
+
+    onSearch(selectedYear, selectedMonth);
+  };
   return (
-    <FormWrapper className="form">
+    <FormWrapper className="form" onSubmit={submitHandler}>
       <div className="controls">
         <div className="control">
           <label htmlFor="year">Year</label>
-          <select name="" id="year">
+          <select name="" id="year" ref={yearInputRef}>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
           </select>
         </div>
         <div className="control">
           <label htmlFor="month">Month</label>
-          <select name="" id="month">
+          <select name="" id="month" ref={monthInputRef}>
             <option value="1">January</option>
             <option value="2">February</option>
             <option value="3">March</option>
