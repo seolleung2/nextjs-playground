@@ -1,10 +1,14 @@
 import React from "react";
+import { EventList, EventSearch } from "@Components/events";
+import { getAllEvents } from "@Data/dummy-data";
 
 function AllEventsPage() {
+  const events = getAllEvents();
   return (
-    <div>
-      <h1>AllEventsPage</h1>
-    </div>
+    <>
+      <EventSearch />
+      <EventList items={events} />
+    </>
   );
 }
 
