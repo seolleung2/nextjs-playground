@@ -49,7 +49,12 @@ export function getAllEvents() {
   return DUMMY_EVENTS;
 }
 
-export function getFilteredEvents(dateFilter: any) {
+type DateFilterType = {
+  year: number;
+  month: number;
+};
+
+export function getFilteredEvents(dateFilter: DateFilterType) {
   const { year, month } = dateFilter;
 
   let filteredEvents = DUMMY_EVENTS.filter((event) => {
