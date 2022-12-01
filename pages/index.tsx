@@ -1,5 +1,6 @@
 import React from "react";
 import { EventList } from "@Components/events";
+import { getFeaturedEvents } from "@Helpers/api-utils";
 
 export interface IEventDataProps {
   id: string;
@@ -24,24 +25,11 @@ export default function Home({ featuredEvents }: HomeProps) {
 }
 
 export async function getStaticProps() {
-  return fetch(
-    "https://nextjs-course-df954-default-rtdb.firebaseio.com/events.json"
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      const dataSet = [];
+  const featuredEvents = await getFeaturedEvents();
 
-      for (const key in data) {
-        dataSet.push({
-          ...data[key],
-          id: key,
-        });
-      }
-
-      return {
-        props: {
-          featuredEvents: dataSet.filter((data) => data.isFeatured),
-        },
-      };
-    });
+  return {
+    props: {
+      featuredEvents,
+    },
+  };
 }

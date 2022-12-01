@@ -7,7 +7,8 @@
       "@Api/*": ["src/api/*"],
       "@Store/*": ["src/store/*"],
       "@Types/*": ["src/types/*"],
-      "@Data/*": ["src/data/*"]
+      "@Data/*": ["src/data/*"],
+      "@Helpers/*": ["src/helpers/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
