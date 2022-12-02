@@ -22,6 +22,11 @@ export async function getFeaturedEvents() {
   return allEvents.filter((event: IEventDataProps) => event.isFeatured);
 }
 
+export async function getEventById(id: string | string[] | undefined) {
+  const allEvents = await getAllEvents();
+  return allEvents.find((event) => event.id === id);
+}
+
 export interface IEventDataProps {
   id: string;
   title: string;
