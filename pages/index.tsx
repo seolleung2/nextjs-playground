@@ -31,5 +31,6 @@ export async function getStaticProps() {
     props: {
       featuredEvents,
     },
+    revalidate: 1800, // 30 mins, 30분마다 한번 페이지를 재생성한다.
   };
 }

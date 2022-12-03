@@ -5,9 +5,8 @@ import {
   EventLogistics,
   EventContent,
 } from "@Components/eventDetail";
-import { ErrorAlert } from "@Components/ui";
 import {
-  getAllEvents,
+  getFeaturedEvents,
   getEventById,
   IEventDataProps,
 } from "@Helpers/api-utils";
@@ -19,9 +18,9 @@ interface IEventDetailProps {
 function EventDetailPage({ event }: IEventDetailProps) {
   if (!event) {
     return (
-      <ErrorAlert>
-        <p>No event found!</p>
-      </ErrorAlert>
+      <div className="center">
+        <p>Loading...</p>
+      </div>
     );
   }
 
@@ -48,17 +47,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const event = await getEventById(params?.eventId);
 
+  const notFound = event ? false : true;
+
   return {
     props: {
       event,
     },
+    revalidate: 30, // 만약 새로운 요청이 들어오고 페이지가 마지막으로 생성된 지 30초가 지나면 다시 생성된다.
+    notFound,
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const allEvents = await getAllEvents();
+  const events = await getFeaturedEvents();
 
-  const pathsWithParams = allEvents.map((event) => ({
+  const pathsWithParams = events.map((event) => ({
     params: {
       eventId: event.id,
     },
@@ -66,6 +69,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: pathsWithParams,
-    fallback: false,
+    fallback: true,
   };
 };
