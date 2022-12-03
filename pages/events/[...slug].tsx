@@ -1,6 +1,5 @@
 import React from "react";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
 import { EventList, ResultsTitle } from "@Components/events";
 import { Button, ErrorAlert } from "@Components/ui";
 import { getFilteredEvents, IEventDataProps } from "@Helpers/api-utils";
@@ -16,12 +15,6 @@ function FilteredEventsPage({
   date,
   isInvalid,
 }: IFilteredEventsProps) {
-  const router = useRouter();
-
-  if (!router.query.slug) {
-    return <p className="center">Loading...</p>;
-  }
-
   if (isInvalid) {
     return (
       <>
@@ -84,14 +77,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     year: Number(year),
     month: Number(month),
   });
-
-  if (!filteredEvents || filteredEvents.length === 0) {
-    return {
-      props: {
-        filteredEvents: null,
-      },
-    };
-  }
 
   return {
     props: {
