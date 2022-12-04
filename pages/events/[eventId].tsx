@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { GetStaticProps, GetStaticPaths } from "next";
 import {
   EventSummary,
@@ -26,6 +27,10 @@ function EventDetailPage({ event }: IEventDetailProps) {
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}

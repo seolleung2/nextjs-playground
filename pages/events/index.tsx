@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { EventList, EventSearch } from "@Components/events";
@@ -19,6 +20,10 @@ function AllEventsPage({ events }: IAllEventsProps) {
   };
   return (
     <>
+      <Head>
+        <title>All Events</title>
+        <meta name="description" content="All events for Next JS Programmer" />
+      </Head>
       <EventSearch onSearch={findEventsHandler} />
       <EventList items={events} />
     </>

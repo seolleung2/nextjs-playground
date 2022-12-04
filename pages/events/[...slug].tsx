@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Head from "next/head";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { EventList, ResultsTitle } from "@Components/events";
@@ -91,6 +92,13 @@ function FilteredEventsPage() {
 
   return (
     <>
+      <Head>
+        <title>Filtered Next.JS Events</title>
+        <meta
+          name="description"
+          content={`Filtered Eveents on ${month}/${year}`}
+        />
+      </Head>
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </>
