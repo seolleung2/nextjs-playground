@@ -40,8 +40,20 @@ function FilteredEventsPage() {
     }
   }, [data]);
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Next.JS Events</title>
+      <meta name="description" content="A list of filtered events." />
+    </Head>
+  );
+
   if (!loadedEvents || !router.query.slug) {
-    return <p className="center">Loading...</p>;
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">Loading...</p>
+      </>
+    );
   }
 
   const [year, month] = slug as string[];
@@ -57,6 +69,7 @@ function FilteredEventsPage() {
   ) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p className="">Invalid filter. Please adjust your values!</p>
         </ErrorAlert>
@@ -77,9 +90,20 @@ function FilteredEventsPage() {
     );
   });
 
+  pageHeadData = (
+    <Head>
+      <title>Filtered Next.JS Events</title>
+      <meta
+        name="description"
+        content={`Filtered Events on ${month}/${year}`}
+      />
+    </Head>
+  );
+
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p className="">No events found for the chosen filter!</p>
         </ErrorAlert>
@@ -92,13 +116,7 @@ function FilteredEventsPage() {
 
   return (
     <>
-      <Head>
-        <title>Filtered Next.JS Events</title>
-        <meta
-          name="description"
-          content={`Filtered Eveents on ${month}/${year}`}
-        />
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </>
