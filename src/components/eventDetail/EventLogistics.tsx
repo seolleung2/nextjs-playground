@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import styled from "styled-components";
 
 import { AddressIcon, DateIcon } from "@Components/icons";
@@ -27,7 +28,7 @@ function EventLogistics({
   return (
     <EventLogisticsWrapper className="logistics">
       <div className="image">
-        <img src={`/${image}`} alt={imageAlt} />
+        <Image src={`/${image}`} alt={imageAlt} width={400} height={400} />
       </div>
       <ul className="list">
         <LogisticsItem icon={DateIcon}>
