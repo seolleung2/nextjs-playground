@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import { EventList } from "@Components/events";
+import { NewsLetterRegistration } from "@Components/input";
 import { getFeaturedEvents } from "@Helpers/api-utils";
 
 export interface IEventDataProps {
@@ -27,6 +28,7 @@ export default function Home({ featuredEvents }: HomeProps) {
           content="Find a lot of great events that allow you to evolve..."
         />
       </Head>
+      <NewsLetterRegistration />
       <EventList items={featuredEvents} />
     </div>
   );

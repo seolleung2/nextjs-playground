@@ -6,6 +6,7 @@ import {
   EventLogistics,
   EventContent,
 } from "@Components/eventDetail";
+import { Comments } from "@Components/input";
 import {
   getFeaturedEvents,
   getEventById,
@@ -41,6 +42,7 @@ function EventDetailPage({ event }: IEventDetailProps) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </>
   );
 }
