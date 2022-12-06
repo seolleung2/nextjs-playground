@@ -11,19 +11,31 @@ function NewsletterRegistration() {
     // optional: validate input
     // send valid data to API
 
-    const reqBody = {
-      email: inputRef.current?.value,
-    };
+    const email = inputRef.current?.value;
 
-    fetch("/api/subscription", {
-      method: "POST",
-      body: JSON.stringify(reqBody),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    const regExpEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+    if (email && regExpEmail.test(email)) {
+      const reqBody = {
+        email,
+      };
+
+      fetch("/api/subscription", {
+        method: "POST",
+        body: JSON.stringify(reqBody),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+
+      return null;
+    }
+
+    alert("올바른 이메일 형식을 입력해 주세요.");
   }
 
   return (
