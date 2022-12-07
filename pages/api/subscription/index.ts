@@ -25,6 +25,14 @@ export default function handler(
   if (req.method === "POST") {
     const { email } = req.body;
 
+    const regExpEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+    if (!email || !regExpEmail.test(email)) {
+      res.status(422).json({ message: "Invalid email address." });
+
+      return;
+    }
+
     const newSubscription = {
       id: new Date().toISOString(),
       email,
