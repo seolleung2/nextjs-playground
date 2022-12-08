@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { MongoClient } from "mongodb";
 import fs from "fs";
 import path from "path";
 
@@ -18,7 +19,7 @@ export function extractJson(filePath: any) {
   return data;
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
@@ -32,6 +33,14 @@ export default function handler(
 
       return;
     }
+
+    const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+
+    const db = client.db();
+
+    await db.collection("emails").insertOne({ email });
+
+    client.close();
 
     const newSubscription = {
       id: new Date().toISOString(),
