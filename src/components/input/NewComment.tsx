@@ -1,15 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, FormEvent } from "react";
 import styled from "styled-components";
-import classes from "./new-comment.module.css";
 
-function NewComment(props: any) {
+type commentInfoType = {
+  email: string;
+  name: string;
+  text: string;
+};
+
+interface INewCommentProps {
+  onAddComment: (commentInfo: commentInfoType) => void;
+}
+
+function NewComment({ onAddComment }: INewCommentProps) {
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
 
-  function sendCommentHandler(event: any) {
+  function sendCommentHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const enteredEmail = emailInputRef.current?.value;
@@ -29,7 +38,7 @@ function NewComment(props: any) {
       return;
     }
 
-    props.onAddComment({
+    onAddComment({
       email: enteredEmail,
       name: enteredName,
       text: enteredComment,
@@ -37,7 +46,7 @@ function NewComment(props: any) {
   }
 
   return (
-    <NewCommentWrapper className="form">
+    <NewCommentWrapper className="form" onSubmit={sendCommentHandler}>
       <div className="row">
         <div className="control">
           <label htmlFor="email">Your email</label>

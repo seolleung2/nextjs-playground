@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { CommentList, NewComment } from "@Components/input";
 
+type commentInfoType = {
+  email: string;
+  name: string;
+  text: string;
+};
+
 function Comments(props: any) {
   const { eventId } = props;
 
@@ -11,8 +17,19 @@ function Comments(props: any) {
     setShowComments((prevStatus) => !prevStatus);
   }
 
-  function addCommentHandler(commentData: any) {
+  function addCommentHandler(commentData: commentInfoType) {
     // send data to API
+
+    console.log("commentData", commentData);
+    fetch(`/api/comments/${eventId}`, {
+      method: "POST",
+      body: JSON.stringify(commentData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   }
 
   return (
