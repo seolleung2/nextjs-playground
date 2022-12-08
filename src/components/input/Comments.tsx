@@ -8,9 +8,11 @@ type commentInfoType = {
   text: string;
 };
 
-function Comments(props: any) {
-  const { eventId } = props;
+interface ICommentsProps {
+  eventId: string;
+}
 
+function Comments({ eventId }: ICommentsProps) {
   const [showComments, setShowComments] = useState<boolean>(false);
 
   function toggleCommentsHandler() {
@@ -20,7 +22,6 @@ function Comments(props: any) {
   function addCommentHandler(commentData: commentInfoType) {
     // send data to API
 
-    console.log("commentData", commentData);
     fetch(`/api/comments/${eventId}`, {
       method: "POST",
       body: JSON.stringify(commentData),
@@ -38,7 +39,7 @@ function Comments(props: any) {
         {showComments ? "Hide" : "Show"} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList />}
+      {showComments && <CommentList eventId={eventId} />}
     </CommentsWrapper>
   );
 }
