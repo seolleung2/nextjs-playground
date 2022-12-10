@@ -5,6 +5,21 @@ type Data = {
   message?: string;
 };
 
+async function connectDatabase() {
+  const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+
+  return client;
+}
+
+async function insertDocument(
+  client: MongoClient,
+  document: { email: string }
+) {
+  const db = client.db();
+
+  await db.collection("newsletter").insertOne(document);
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -20,13 +35,22 @@ export default async function handler(
       return;
     }
 
-    const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+    let client: any;
 
-    const db = client.db();
+    try {
+      client = await connectDatabase();
+    } catch (error) {
+      res.status(500).json({ message: "Connecting to the database failed.." });
+      return;
+    }
 
-    await db.collection("newsletter").insertOne({ email });
-
-    client.close();
+    try {
+      await insertDocument(client, { email });
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: "Inserting data failed.." });
+      return;
+    }
 
     res.status(201).json({ message: "success" });
   } else {
