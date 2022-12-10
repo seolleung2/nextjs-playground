@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CommentList, NewComment } from "@Components/input";
 
@@ -8,12 +8,33 @@ type commentInfoType = {
   text: string;
 };
 
+interface ICommentTypes {
+  id: string;
+  eventId: string;
+  email: string;
+  name: string;
+  text: string;
+}
+
 interface ICommentsProps {
   eventId: string;
 }
 
 function Comments({ eventId }: ICommentsProps) {
   const [showComments, setShowComments] = useState<boolean>(false);
+  const [comments, setComments] = useState<Array<ICommentTypes>>([]);
+
+  useEffect(() => {
+    if (showComments) {
+      fetch(`/api/comments/${eventId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setComments(data.comment);
+        });
+    }
+
+    return () => setComments([]);
+  }, [showComments]);
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
@@ -39,7 +60,7 @@ function Comments({ eventId }: ICommentsProps) {
         {showComments ? "Hide" : "Show"} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList eventId={eventId} />}
+      {showComments && <CommentList items={comments} />}
     </CommentsWrapper>
   );
 }

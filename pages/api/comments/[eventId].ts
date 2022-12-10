@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { MongoClient } from "mongodb";
 import fs from "fs";
 import path from "path";
 
@@ -19,11 +20,14 @@ export function extractJson(filePath: any) {
   return data;
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   const { eventId } = req.query;
+
+  const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+
   if (req.method === "POST") {
     const { email, name, text } = req.body;
 
@@ -42,8 +46,18 @@ export default function handler(
       return;
     }
 
+    const comment = {
+      eventId,
+      email,
+      name,
+      text,
+    };
+
+    const db = client.db();
+    const result = await db.collection("comments").insertOne(comment);
+
     const newComment = {
-      id: new Date().toISOString(),
+      id: result.insertedId,
       eventId,
       email,
       name,
@@ -70,4 +84,6 @@ export default function handler(
 
     res.status(201).json({ comment: filteredData });
   }
+
+  client.close();
 }

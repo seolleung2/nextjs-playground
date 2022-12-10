@@ -38,7 +38,7 @@ export default async function handler(
 
     const db = client.db();
 
-    await db.collection("emails").insertOne({ email });
+    await db.collection("newsletter").insertOne({ email });
 
     client.close();
 

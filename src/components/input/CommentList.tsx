@@ -1,33 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import useSWR from "swr";
 
-interface ICommentListProps {
+type CommentType = {
+  id: string;
   eventId: string;
-}
-
-const fetcher = (...args: any) => {
-  const argsData = [...args] as any;
-  return fetch(argsData).then((res) => res.json());
+  email: string;
+  name: string;
+  text: string;
 };
 
-function CommentList({ eventId }: ICommentListProps) {
-  const { data, error } = useSWR(`/api/comments/${eventId}`, fetcher, {
-    refreshInterval: 500,
-  });
+interface ICommentTypes {
+  items: Array<CommentType>;
+}
 
-  if (!data) {
+function CommentList({ items }: ICommentTypes) {
+  if (!items) {
     return <p className="center">Loading...</p>;
   }
 
-  if (data.comment.length === 0) {
+  if (items.length === 0) {
     return <p className="center">Oh, There are not comments on this event.</p>;
   }
 
   return (
     <CommentListWrapper className="comments">
       {/* Render list of comments - fetched from API */}
-      {data.comment.map((comment: any) => {
+      {items.map((comment: CommentType) => {
         return (
           <li key={comment.id}>
             <p>{comment.text}</p>
