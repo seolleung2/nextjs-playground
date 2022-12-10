@@ -9,7 +9,7 @@ type commentInfoType = {
 };
 
 interface ICommentTypes {
-  id: string;
+  _id: string;
   eventId: string;
   email: string;
   name: string;

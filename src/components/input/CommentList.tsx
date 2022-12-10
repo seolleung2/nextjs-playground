@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 type CommentType = {
-  id: string;
+  _id: string;
   eventId: string;
   email: string;
   name: string;
@@ -24,10 +24,9 @@ function CommentList({ items }: ICommentTypes) {
 
   return (
     <CommentListWrapper className="comments">
-      {/* Render list of comments - fetched from API */}
       {items.map((comment: CommentType) => {
         return (
-          <li key={comment.id}>
+          <li key={comment._id}>
             <p>{comment.text}</p>
             <div>
               By <address>{comment.name}</address>
