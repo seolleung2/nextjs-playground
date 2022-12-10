@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MongoClient } from "mongodb";
+import { connectDatabase, insertDocument } from "@Helpers/db-util";
 
 type Data = {
   message?: string;
@@ -12,9 +12,14 @@ export default async function handler(
 ) {
   const { eventId } = req.query;
 
-  const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+  let client: any;
 
-  const db = client.db();
+  try {
+    client = await connectDatabase();
+  } catch (error) {
+    res.status(500).json({ message: "Connecting to the database failed.." });
+    return;
+  }
 
   if (req.method === "POST") {
     const { email, name, text } = req.body;
@@ -30,7 +35,7 @@ export default async function handler(
       text.trim() === ""
     ) {
       res.status(422).json({ message: "Invalid input." });
-
+      client.close();
       return;
     }
 
@@ -41,27 +46,39 @@ export default async function handler(
       text,
     };
 
-    const result = await db.collection("comments").insertOne(comment);
+    let result;
 
-    const newComment = {
-      id: result.insertedId,
-      eventId,
-      email,
-      name,
-      text,
-    };
+    try {
+      result = await insertDocument(client, "comments", comment);
 
-    res.status(201).json({ message: "Added comment", comment: newComment });
+      const newComment = {
+        _id: result.insertedId,
+        eventId,
+        email,
+        name,
+        text,
+      };
+
+      res.status(201).json({ message: "Added comment", comment: newComment });
+    } catch (error) {
+      res.status(500).json({ message: "Inserting comment failed.." });
+    }
   }
 
   if (req.method === "GET") {
-    const comments = await db
-      .collection("comments")
-      .find({ eventId: eventId })
-      .sort({ _id: -1 })
-      .toArray();
+    const db = client.db();
 
-    res.status(201).json({ comment: comments });
+    try {
+      const comments = await db
+        .collection("comments")
+        .find({ eventId: eventId })
+        .sort({ _id: -1 })
+        .toArray();
+
+      res.status(201).json({ comment: comments });
+    } catch (error) {
+      res.status(500).json({ message: "Getting comment list failed.." });
+    }
   }
 
   client.close();

@@ -1,24 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MongoClient } from "mongodb";
+import { connectDatabase, insertDocument } from "@Helpers/db-util";
 
 type Data = {
   message?: string;
 };
-
-async function connectDatabase() {
-  const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
-
-  return client;
-}
-
-async function insertDocument(
-  client: MongoClient,
-  document: { email: string }
-) {
-  const db = client.db();
-
-  await db.collection("newsletter").insertOne(document);
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,7 +30,7 @@ export default async function handler(
     }
 
     try {
-      await insertDocument(client, { email });
+      await insertDocument(client, "newsletter", { email });
       client.close();
     } catch (error) {
       res.status(500).json({ message: "Inserting data failed.." });
